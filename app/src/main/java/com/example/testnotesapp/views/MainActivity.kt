@@ -1,4 +1,4 @@
-package com.example.testnotesapp
+package com.example.testnotesapp.views
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Greeting("World")
+                    MainScreen()
                 }
             }
         }
