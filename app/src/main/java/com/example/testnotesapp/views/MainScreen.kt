@@ -70,7 +70,7 @@ fun NoteCardItem(title:String,description:String){
 }
 
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
     TestNotesAppTheme {
