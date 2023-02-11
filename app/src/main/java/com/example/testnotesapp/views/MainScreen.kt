@@ -19,29 +19,7 @@ import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 
 @Composable
 fun MainScreen(){
-    val context = LocalContext.current
-    val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Open))
-    Scaffold(
-        scaffoldState = scaffoldState,
-        topBar = {
-            TopAppBar(
-                title = {Text("Notes App")}
-            )
-        },
-        floatingActionButtonPosition = FabPosition.End,
-        floatingActionButton = {
-            FloatingActionButton(onClick = {Toast.makeText(context,"Dodaj notatkę",Toast.LENGTH_SHORT).show() }) {
-                Icon(Icons.Default.Add,"")
-            }
-        },
-        drawerContent = {Text("Nawigacja")},
-        content = {
-                  NotesColumn(notesList = notesList)
-        },
-        bottomBar = { BottomAppBar {
-            Text("Dolna nawigacja")
-        }}
-    )
+    NotesColumn(notesList = notesList)
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -49,7 +27,7 @@ fun NotesColumn(
     notesList:List<Note>
 ){
     LazyVerticalGrid(
-        cells = GridCells.Adaptive(minSize = 200.dp)
+        cells = GridCells.Fixed(2)
     ){
         items(notesList){ note->
             NoteCardItem(title = note.title, description = note.description)
