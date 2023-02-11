@@ -125,7 +125,15 @@ fun NotesApp(){
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .padding(10.dp)
-                            .clickable { Toast.makeText(context,"idź do strony o aplikacji", Toast.LENGTH_SHORT).show() }
+                            .clickable {
+                                Toast
+                                    .makeText(
+                                        context,
+                                        "idź do strony o aplikacji",
+                                        Toast.LENGTH_SHORT
+                                    )
+                                    .show()
+                            }
                             .fillMaxWidth()
                     ) {
                         Text(
@@ -160,6 +168,9 @@ fun NotesNavHost(
     ){
         composable("Main"){
             MainScreen()
+        }
+        composable("addNote"){
+            AddNoteScreen()
         }
     }
 }
