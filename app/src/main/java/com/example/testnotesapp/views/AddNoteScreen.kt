@@ -11,6 +11,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 
+
+
 @Composable
 fun AddNoteScreen(){
     Column() {
@@ -19,6 +21,8 @@ fun AddNoteScreen(){
         SaveButton()
     }
 }
+
+
 
 @Composable
 fun InputTitle(

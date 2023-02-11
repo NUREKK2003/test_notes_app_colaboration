@@ -51,7 +51,6 @@ fun NotesColumn(
     }
 }
 
-@OptIn(ExperimentalGraphicsApi::class)
 @Composable
 fun NoteCardItem(
     noteItem:Note,
