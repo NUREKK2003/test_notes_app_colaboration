@@ -120,7 +120,7 @@ fun NotesApp(){
                                 .size(50.dp)
                         )
                         Text(
-                            text = "Tryb nocny",
+                            text = "Night theme",
                             fontSize = MaterialTheme.typography.h5.fontSize,
                             modifier = Modifier
                                 .padding(start = 10.dp, end = 10.dp)
@@ -132,18 +132,12 @@ fun NotesApp(){
                         modifier = Modifier
                             .padding(10.dp)
                             .clickable {
-                                Toast
-                                    .makeText(
-                                        context,
-                                        "idź do strony o aplikacji",
-                                        Toast.LENGTH_SHORT
-                                    )
-                                    .show()
+                                navController.navigate("AboutScreen")
                             }
                             .fillMaxWidth()
                     ) {
                         Text(
-                            text = "O aplikacji",
+                            text = "About app",
                             fontSize = MaterialTheme.typography.h5.fontSize,
                             modifier = Modifier
                                 .padding(start = 10.dp, end = 10.dp)
@@ -177,6 +171,9 @@ fun NotesNavHost(
         }
         composable("AddNote"){
             AddNoteScreen { navController.navigate("Main") }
+        }
+        composable("AboutScreen"){
+            AboutScreen()
         }
     }
 }
