@@ -1,6 +1,7 @@
 package com.example.testnotesapp.views
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,10 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Warning
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import kotlinx.coroutines.launch
@@ -51,6 +50,9 @@ fun NotesApp(){
         val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
         val coroutineScope = rememberCoroutineScope()
 
+        // aktualna pozycja w nawigacji
+        val navBackStackEntry by navController.currentBackStackEntryAsState()
+
         // Przełącznik do ciemnego motywu
         val darkThemeSwitchState = remember{ mutableStateOf(false) }
         Scaffold(
@@ -71,8 +73,12 @@ fun NotesApp(){
             },
             floatingActionButtonPosition = FabPosition.End,
             floatingActionButton = {
-                FloatingActionButton(onClick = { Toast.makeText(context,"Dodaj notatkę", Toast.LENGTH_SHORT).show() }) {
-                    Icon(Icons.Default.Add,"")
+                Log.d("NAVIGATIONDESC",navController.currentBackStackEntry?.destination?.route.toString())
+
+                if(navBackStackEntry?.destination?.route.toString()=="Main"){
+                    FloatingActionButton(onClick = { navController.navigate("AddNote") }) {
+                        Icon(Icons.Default.Add,"")
+                    }
                 }
             },
             drawerContent = {
@@ -169,8 +175,8 @@ fun NotesNavHost(
         composable("Main"){
             MainScreen()
         }
-        composable("addNote"){
-            AddNoteScreen()
+        composable("AddNote"){
+            AddNoteScreen { navController.navigate("Main") }
         }
     }
 }

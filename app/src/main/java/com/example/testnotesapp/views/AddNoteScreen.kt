@@ -14,13 +14,15 @@ import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 
 
 @Composable
-fun AddNoteScreen(){
+fun AddNoteScreen(
+    onClickSave: () -> Unit = {}
+){
     Column() {
         InputTitle()
         Box(modifier = Modifier.weight(1f)){
             InputDescription()
         }
-        SaveButton()
+        SaveButton(onClickSave)
     }
 }
 
@@ -60,9 +62,12 @@ fun InputDescription(
 }
 
 @Composable
-fun SaveButton(modifier: Modifier=Modifier){
+fun SaveButton(
+    onClickSave: () -> Unit = {},
+    modifier: Modifier=Modifier
+){
     Button(
-        onClick = {},
+        onClick = onClickSave,
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)
