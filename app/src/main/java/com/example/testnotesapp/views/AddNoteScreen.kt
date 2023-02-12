@@ -17,7 +17,9 @@ import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 fun AddNoteScreen(){
     Column() {
         InputTitle()
-        InputDescription()
+        Box(modifier = Modifier.weight(1f)){
+            InputDescription()
+        }
         SaveButton()
     }
 }
@@ -32,6 +34,7 @@ fun InputTitle(
     TextField(
         value = text,
         onValueChange = { text = it },
+        placeholder = {Text("title...")},
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
             .fillMaxWidth()
@@ -47,10 +50,11 @@ fun InputDescription(
     TextField(
         value = text,
         onValueChange = { text = it },
+        placeholder = {Text("description...")},
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
             .padding(10.dp)
-            .height(600.dp)
+            .fillMaxHeight()
             .fillMaxWidth()
     )
 }
