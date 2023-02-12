@@ -34,7 +34,7 @@ fun Title(
 fun Autors(
     modifier: Modifier=Modifier
 ){
-    Column() {
+    Column(modifier = modifier) {
         Text(text = "Programmers:")
         Text(text = "Nurek")
         Text(text = "Oskar")
