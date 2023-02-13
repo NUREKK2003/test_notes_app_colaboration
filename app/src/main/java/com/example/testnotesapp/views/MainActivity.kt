@@ -42,9 +42,12 @@ class MainActivity : ComponentActivity() {
     }
 }
 
+
 @Composable
 fun NotesApp(){
-    TestNotesAppTheme {
+    // Przełącznik do ciemnego motywu
+    val darkThemeSwitchState = remember{ mutableStateOf(false) }
+    TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
         val navController = rememberNavController()
         val context = LocalContext.current
         val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
@@ -53,8 +56,7 @@ fun NotesApp(){
         // aktualna pozycja w nawigacji
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-        // Przełącznik do ciemnego motywu
-        val darkThemeSwitchState = remember{ mutableStateOf(false) }
+
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = {
@@ -161,8 +163,7 @@ fun NotesNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ){
-    NavHost(
-        navController = navController,
+    NavHost(        navController = navController,
         startDestination = "Main",
         modifier = modifier
     ){
