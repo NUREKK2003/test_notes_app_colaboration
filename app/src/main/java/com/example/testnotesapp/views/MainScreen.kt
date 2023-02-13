@@ -122,7 +122,7 @@ fun NoteCardItem(
 }
 
 
-@Preview(showBackground = true)
+//@Preview(showBackground = true)
 @Composable
 fun MainScreenPreview() {
     TestNotesAppTheme {
