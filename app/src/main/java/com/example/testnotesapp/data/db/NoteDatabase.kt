@@ -5,9 +5,10 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.testnotesapp.data.db.dao.NoteDao
+import com.example.testnotesapp.data.db.structures.NoteEntity
 
 
-@Database(entities = [NoteDatabase::class], version = 1, exportSchema = false)
+@Database(entities = [NoteEntity::class], version = 1, exportSchema = false)
 abstract class NoteDatabase:RoomDatabase() {
     abstract fun NoteDao():NoteDao
 
@@ -23,8 +24,7 @@ abstract class NoteDatabase:RoomDatabase() {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
                     NoteDatabase::class.java,
-                    "Note_database"
-
+                    "note_database"
                 ).build()
                 INSTANCE = instance
                 return instance

@@ -24,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -32,7 +33,10 @@ import androidx.navigation.compose.rememberNavController
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import kotlinx.coroutines.launch
 import com.example.testnotesapp.R
+import com.example.testnotesapp.viewmodels.NoteViewModel
 
+
+private lateinit var noteViewModel: NoteViewModel
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +49,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NotesApp(){
+
     // Przełącznik do ciemnego motywu
     val darkThemeSwitchState = remember{ mutableStateOf(false) }
     TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
