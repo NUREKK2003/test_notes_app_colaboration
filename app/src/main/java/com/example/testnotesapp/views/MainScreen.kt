@@ -42,6 +42,7 @@ fun MainScreen(
     val notesUiState by notesViewModel.uiState.collectAsState()
     if(notesUiState.loading){
         Text(text = "Loading...")
+        //Text(text = notesViewModel.getAllNotes().collectAsState(initial = emptyList()).value.toString())
     }else{
         NotesColumn(notesList = notesUiState.notesList)
     }

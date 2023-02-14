@@ -12,23 +12,19 @@ import com.example.testnotesapp.data.db.structures.NoteEntity
 abstract class NoteDatabase:RoomDatabase() {
     abstract fun NoteDao():NoteDao
 
-    companion object{
-        @Volatile
-        private var INSTANCE:NoteDatabase?=null
-        fun getDatabase(context: Context): NoteDatabase{
-            val tempInstance = INSTANCE
-            if(tempInstance!=null){
-                return tempInstance
-            }
-            synchronized(this){
-                val instance = Room.databaseBuilder(
-                    context.applicationContext,
-                    NoteDatabase::class.java,
-                    "note_database"
-                ).build()
-                INSTANCE = instance
-                return instance
-            }
+
+}
+object NotesDb{
+    @Volatile
+    private var db:NoteDatabase?=null
+    fun getDatabase(context: Context): NoteDatabase {
+        if(db==null){
+            db = Room.databaseBuilder(
+                context,
+                NoteDatabase::class.java,
+                "note_database"
+            ).build()
         }
+        return db!!
     }
 }

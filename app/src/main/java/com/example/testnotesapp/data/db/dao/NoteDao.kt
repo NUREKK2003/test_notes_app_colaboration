@@ -3,15 +3,17 @@ package com.example.testnotesapp.data.db.dao
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.testnotesapp.data.db.structures.NoteEntity
+import kotlinx.coroutines.flow.Flow
 
 
 @Dao
 interface NoteDao {
+    // suspend - asynchroniczne
     @Query("SELECT * FROM note_table")
-    fun getAllNotes(): LiveData<List<NoteEntity>>
+    fun getAllNotes(): Flow<List<NoteEntity>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addNote(note:NoteEntity)
+    suspend fun addNote(note:NoteEntity)
 
     @Update
     suspend fun updateNote(note:NoteEntity)
