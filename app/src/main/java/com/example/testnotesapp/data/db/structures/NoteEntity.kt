@@ -9,5 +9,6 @@ data class NoteEntity(
     val title:String,
     val description:String,
     @PrimaryKey(autoGenerate = true)
-    val id:Int=0
+    val id:Int=0,
+    val color: String="111111"
 )

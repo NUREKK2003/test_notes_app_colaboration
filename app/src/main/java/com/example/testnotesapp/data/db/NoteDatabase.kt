@@ -8,7 +8,7 @@ import com.example.testnotesapp.data.db.dao.NoteDao
 import com.example.testnotesapp.data.db.structures.NoteEntity
 
 
-@Database(entities = [NoteEntity::class], version = 1, exportSchema = false)
+@Database(entities = [NoteEntity::class], version = 2, exportSchema = false)
 abstract class NoteDatabase:RoomDatabase() {
     abstract fun NoteDao():NoteDao
 
@@ -23,7 +23,9 @@ object NotesDb{
                 context,
                 NoteDatabase::class.java,
                 "note_database"
-            ).build()
+            )
+                .fallbackToDestructiveMigration()
+                .build()
         }
         return db!!
     }

@@ -35,9 +35,9 @@ fun AddNoteScreen(
         }
         SaveButton(onClickSave,{
             if(selectedNote.id==Constants.DEFAULT_ID){
-                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value))
+                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value, color = selectedNote.color.toString()))
             }else{
-                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value,selectedNote.id))
+                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value,selectedNote.id, color = selectedNote.color.toString()))
             }
             })
     }
