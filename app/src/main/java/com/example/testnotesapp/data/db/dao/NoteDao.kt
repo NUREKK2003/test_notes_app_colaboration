@@ -12,7 +12,7 @@ interface NoteDao {
     @Query("SELECT * FROM note_table")
     fun getAllNotes(): Flow<List<NoteEntity>>
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE) // w przypadku przesłania notatki o tym samym id nastapi aktualizacja
     suspend fun addNote(note:NoteEntity)
 
     @Update

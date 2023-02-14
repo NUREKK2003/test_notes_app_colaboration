@@ -1,5 +1,6 @@
 package com.example.testnotesapp.views
 
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -29,30 +30,35 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.data.example.ExampleData
 import com.example.testnotesapp.data.structures.Note
+import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import com.example.testnotesapp.viewmodels.NoteViewModel
 import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(
+    onClickEditNote: () -> Unit = {},
     notesViewModel: NoteViewModel = viewModel()
 ){
     val notesUiState by notesViewModel.uiState.collectAsState()
     if(notesUiState.loading){
         Text(text = "Loading...")
-        //Text(text = notesViewModel.getAllNotes().collectAsState(initial = emptyList()).value.toString())
     }else{
-        NotesColumn(notesList = notesUiState.notesList)
+        NotesColumn(notesList = notesUiState.notesList,onClickEditNote,notesViewModel)
     }
 
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesColumn(
-    notesList:List<Note>
+    notesList:List<Note>,
+    onClickEditNote: () -> Unit = {},
+    notesViewModel: NoteViewModel = viewModel()
 ){
+
     LazyVerticalGrid(
         cells = GridCells.Fixed(2),
         contentPadding = PaddingValues(
@@ -65,16 +71,21 @@ fun NotesColumn(
         items(notesList){ note->
             NoteCardItem(
                 note,
-                Modifier.animateItemPlacement()
+                onClickEditNote,
+                modifier = Modifier.animateItemPlacement(),
+                notesViewModel = notesViewModel
             )
         }
+
     }
 }
 
 @Composable
 fun NoteCardItem(
     noteItem:Note,
-    modifier: Modifier=Modifier
+    onClickEditNote: () -> Unit = {},
+    modifier: Modifier=Modifier,
+    notesViewModel: NoteViewModel = viewModel()
 ){
     // do droplisty
     var expanded by remember { mutableStateOf(false) }
@@ -88,6 +99,10 @@ fun NoteCardItem(
         modifier = modifier
             .padding(4.dp)
             .height(150.dp)
+            .clickable {
+                onClickEditNote.invoke()
+                notesViewModel.chooseNoteById(noteItem.id)
+            }
     ) {
         Column(
             modifier = Modifier
@@ -121,6 +136,14 @@ fun NoteCardItem(
                             DropdownMenuItem(onClick = {
                                 selectedIndex = index
                                 expanded = false
+
+                                if(s=="Edit"){
+                                    onClickEditNote.invoke()
+                                    notesViewModel.chooseNoteById(noteItem.id)
+                                }else if(s=="Delete"){
+                                    notesViewModel.deleteNote(NoteEntity("","",noteItem.id))
+                                    
+                                }
                             }) {
                                 Text(text = s)
                             }

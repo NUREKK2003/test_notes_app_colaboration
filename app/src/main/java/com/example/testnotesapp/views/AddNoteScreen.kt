@@ -10,20 +10,36 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.testnotesapp.data.db.structures.NoteEntity
+import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import com.example.testnotesapp.viewmodels.NoteViewModel
 
 
 @Composable
 fun AddNoteScreen(
-    onClickSave: () -> Unit = {}
+    onClickSave: () -> Unit = {},
+    notesViewModel: NoteViewModel = viewModel(),
+    noteId:Int = Constants.DEFAULT_ID
 ){
+    val selectedNote = notesViewModel.getNoteById(noteId)
+    var textTit = remember { mutableStateOf(selectedNote.title) }
+
+    var textDesc = remember { mutableStateOf(selectedNote.description) }
+
+
     Column() {
-        InputTitle()
+        InputTitle(textTit)
         Box(modifier = Modifier.weight(1f)){
-            InputDescription()
+            InputDescription(textDesc)
         }
-        SaveButton(onClickSave)
+        SaveButton(onClickSave,{
+            if(selectedNote.id==Constants.DEFAULT_ID){
+                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value))
+            }else{
+                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value,selectedNote.id))
+            }
+            })
     }
 }
 
@@ -31,12 +47,12 @@ fun AddNoteScreen(
 
 @Composable
 fun InputTitle(
+    text:MutableState<String>,
     modifier: Modifier=Modifier
 ){
-    var text by remember { mutableStateOf("") }
     TextField(
-        value = text,
-        onValueChange = { text = it },
+        value = text.value,
+        onValueChange = { text.value = it },
         placeholder = {Text("title...")},
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
@@ -47,12 +63,12 @@ fun InputTitle(
 }
 @Composable
 fun InputDescription(
+    text:MutableState<String>,
     modifier: Modifier=Modifier
 ){
-    var text by remember { mutableStateOf("") }
     TextField(
-        value = text,
-        onValueChange = { text = it },
+        value = text.value,
+        onValueChange = { text.value = it },
         placeholder = {Text("description...")},
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
@@ -64,11 +80,15 @@ fun InputDescription(
 
 @Composable
 fun SaveButton(
+    onClickGotoMainScreen: () -> Unit = {},
     onClickSave: () -> Unit = {},
     modifier: Modifier=Modifier
 ){
     Button(
-        onClick = onClickSave,
+        onClick = {
+            onClickSave.invoke()
+            onClickGotoMainScreen.invoke()
+        },
         modifier = modifier
             .fillMaxWidth()
             .height(50.dp)

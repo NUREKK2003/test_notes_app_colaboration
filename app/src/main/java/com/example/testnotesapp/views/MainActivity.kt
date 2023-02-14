@@ -35,10 +35,12 @@ import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import kotlinx.coroutines.launch
 import com.example.testnotesapp.R
 import com.example.testnotesapp.data.db.structures.NoteEntity
+import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.viewmodels.NoteViewModel
 
 
-private lateinit var noteViewModel: NoteViewModel
+
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,11 @@ fun NotesApp(){
     // Przełącznik do ciemnego motywu
     val darkThemeSwitchState = remember{ mutableStateOf(false) }
     TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
+
+        // viewModel
+        val noteViewModel: NoteViewModel = viewModel()
+
+
         val navController = rememberNavController()
         val context = LocalContext.current
         val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
@@ -85,7 +92,10 @@ fun NotesApp(){
                 Log.d("NAVIGATIONDESC",navController.currentBackStackEntry?.destination?.route.toString())
 
                 if(navBackStackEntry?.destination?.route.toString()=="Main"){
-                    FloatingActionButton(onClick = { navController.navigate("AddNote") }) {
+                    FloatingActionButton(onClick = {
+                        navController.navigate("AddNote")
+                        noteViewModel.selectedNote = Constants.DEFAULT_NOTE
+                    }) {
                         Icon(Icons.Default.Add,"")
                     }
                 }
@@ -177,11 +187,10 @@ fun NotesNavHost(
         modifier = modifier
     ){
         composable("Main"){
-            MainScreen()
+            MainScreen({navController.navigate("AddNote")},notesViewModel)
         }
         composable("AddNote"){
-            AddNoteScreen { navController.navigate("Main")
-            notesViewModel.addNote(NoteEntity("test1","test"))}
+            AddNoteScreen ({ navController.navigate("Main")},notesViewModel)
         }
         composable("AboutScreen"){
             AboutScreen()

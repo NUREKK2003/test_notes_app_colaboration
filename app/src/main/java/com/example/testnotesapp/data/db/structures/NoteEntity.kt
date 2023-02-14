@@ -1,5 +1,6 @@
 package com.example.testnotesapp.data.db.structures
 
+import android.graphics.Color
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
