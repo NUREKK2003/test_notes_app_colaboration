@@ -28,22 +28,19 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
 
 
+        // wczytanie listy notatek
         viewModelScope.launch {
-            //getAllNotes().onEach{ value-> notesEntities = value as MutableList<NoteEntity>  }
-
             getAllNotes().collect{
                 it.forEach { item->
                     notesEntities.add(item)
-                    Log.d("TEST123",item.toString())
                 }
-            }
-            Log.d("TEST123",notesEntities.toString())
-            var listOfNotes = mutableListOf<Note>()
-            notesEntities.forEach { noteEntity ->
-                listOfNotes.add(Note(noteEntity.title, noteEntity.description, Color.Blue))
-            }
-            _uiState.update {
-                it.copy(notesList = listOfNotes, false)
+                var listOfNotes = mutableListOf<Note>()
+                notesEntities.forEach { noteEntity ->
+                    listOfNotes.add(Note(noteEntity.title, noteEntity.description, Color.Blue))
+                }
+                _uiState.update {
+                    it.copy(notesList = listOfNotes, false)
+                }
             }
         }
     }
