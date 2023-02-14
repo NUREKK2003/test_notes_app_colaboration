@@ -25,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -33,6 +34,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import kotlinx.coroutines.launch
 import com.example.testnotesapp.R
+import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.viewmodels.NoteViewModel
 
 
@@ -166,7 +168,8 @@ fun NotesApp(){
 @Composable
 fun NotesNavHost(
     navController: NavHostController,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    notesViewModel: NoteViewModel = viewModel()
 ){
     NavHost(
         navController = navController,
@@ -177,7 +180,8 @@ fun NotesNavHost(
             MainScreen()
         }
         composable("AddNote"){
-            AddNoteScreen { navController.navigate("Main") }
+            AddNoteScreen { navController.navigate("Main")
+            notesViewModel.addNote(NoteEntity("test1","test"))}
         }
         composable("AboutScreen"){
             AboutScreen()
