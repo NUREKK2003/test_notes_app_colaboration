@@ -168,7 +168,8 @@ fun NotesNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier
 ){
-    NavHost(        navController = navController,
+    NavHost(
+        navController = navController,
         startDestination = "Main",
         modifier = modifier
     ){

@@ -1,6 +1,8 @@
 package com.example.testnotesapp.views
 
 import android.widget.Toast
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -8,6 +10,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.GridCells
 import androidx.compose.foundation.lazy.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -16,6 +19,7 @@ import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ExperimentalGraphicsApi
 import androidx.compose.ui.platform.LocalContext
@@ -23,13 +27,25 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.testnotesapp.data.example.ExampleData
 import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.ui.theme.TestNotesAppTheme
+import com.example.testnotesapp.viewmodels.NoteViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun MainScreen(){
-    NotesColumn(notesList = ExampleData.notesList)
+fun MainScreen(
+    notesViewModel: NoteViewModel = viewModel()
+){
+    val notesUiState by notesViewModel.uiState.collectAsState()
+    if(notesUiState.loading){
+        Text(text = "Loading...")
+    }else{
+        NotesColumn(notesList = notesUiState.notesList)
+    }
+
 }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -46,7 +62,10 @@ fun NotesColumn(
         )
     ){
         items(notesList){ note->
-            NoteCardItem(note)
+            NoteCardItem(
+                note,
+                Modifier.animateItemPlacement()
+            )
         }
     }
 }
@@ -63,7 +82,7 @@ fun NoteCardItem(
 
     Card(
         elevation = 10.dp,
-        shape = RoundedCornerShape(3.dp),
+        shape = RoundedCornerShape(4.dp),
         backgroundColor = noteItem.color,
         modifier = modifier
             .padding(4.dp)
