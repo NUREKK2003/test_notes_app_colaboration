@@ -6,6 +6,7 @@ import android.os.Handler
 import android.util.Log
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.lifecycle.*
 import com.example.testnotesapp.data.db.NoteDatabase
 import com.example.testnotesapp.data.db.structures.NoteEntity
@@ -59,7 +60,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
                 }
                 listOfNotes.clear()
                 notesEntities.forEach { noteEntity ->
-                    listOfNotes.add(Note(noteEntity.title, noteEntity.description, Color.Blue,noteEntity.id))
+                    listOfNotes.add(Note(noteEntity.title, noteEntity.description, Color(noteEntity.color),noteEntity.id))
                 }
                 _uiState.update {
                     it.copy(notesList = listOfNotes, false)
@@ -82,6 +83,22 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
             }
         }
         return selectedNote
+    }
+    fun selectColorByIndex(index:Int){
+        when(index){
+            0 ->{
+                selectedNote.color = Color.Red
+            }
+            1 ->{
+                selectedNote.color = Color.Green
+            }
+            2 ->{
+                selectedNote.color = Color.Blue
+            }
+            else ->{
+                selectedNote.color = Constants.DEFAULT_NOTE_COLOR
+            }
+        }
     }
     fun chooseNoteById(id:Int){
         listOfNotes.forEach{note->

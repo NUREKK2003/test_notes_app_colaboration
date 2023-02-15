@@ -10,5 +10,5 @@ data class NoteEntity(
     val description:String,
     @PrimaryKey(autoGenerate = true)
     val id:Int=0,
-    val color: String="111111"
+    val color: Int=32423
 )

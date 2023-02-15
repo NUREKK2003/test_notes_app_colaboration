@@ -116,12 +116,13 @@ fun NoteCardItem(
                     maxLines = 1,
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
-                    fontSize = MaterialTheme.typography.subtitle1.fontSize
+                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                    color = Color.Black
                 )
                 // do wyrównania ostatniego elementu wiersza do prawej
                 Spacer(Modifier.weight(1f))
                 IconButton(onClick = {expanded = true }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options")
+                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options", tint = Color.Black)
 
                     DropdownMenu(
                         expanded = expanded,
@@ -145,7 +146,10 @@ fun NoteCardItem(
                                     
                                 }
                             }) {
-                                Text(text = s)
+                                Text(
+                                    text = s,
+                                    color = Color.Black
+                                )
                             }
                         }
                     }
@@ -156,6 +160,7 @@ fun NoteCardItem(
                 fontSize = MaterialTheme.typography.body1.fontSize,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
+                color = Color.Black,
                 modifier = Modifier
                     .padding(top = 5.dp)
             )

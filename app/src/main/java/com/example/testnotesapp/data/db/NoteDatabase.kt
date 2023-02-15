@@ -8,7 +8,7 @@ import com.example.testnotesapp.data.db.dao.NoteDao
 import com.example.testnotesapp.data.db.structures.NoteEntity
 
 
-@Database(entities = [NoteEntity::class], version = 2, exportSchema = false)
+@Database(entities = [NoteEntity::class], version = 3, exportSchema = false)
 abstract class NoteDatabase:RoomDatabase() {
     abstract fun NoteDao():NoteDao
 
