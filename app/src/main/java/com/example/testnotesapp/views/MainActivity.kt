@@ -14,11 +14,13 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Warning
+import androidx.compose.material.icons.outlined.MoreVert
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -70,7 +72,10 @@ fun NotesApp(){
         // aktualna pozycja w nawigacji
         val navBackStackEntry by navController.currentBackStackEntryAsState()
 
-
+        // czy lista na topAppBarze jest rozsunięta
+        var dropDownTopBarMenuExpanded by remember {
+            mutableStateOf(false)
+        }
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = {
@@ -83,6 +88,24 @@ fun NotesApp(){
                             }
                         }) {
                             Icon(imageVector = Icons.Default.Menu, contentDescription = "Menu")
+                        }
+                    },
+                    actions = {
+                        TopAppBarButton(imageVector = Icons.Outlined.MoreVert, description = "options") {
+                            dropDownTopBarMenuExpanded=true
+                        }
+                        DropdownMenu(
+                            expanded = dropDownTopBarMenuExpanded,
+                            onDismissRequest = {
+                                dropDownTopBarMenuExpanded=false
+                            }
+                        ) {
+                            DropdownMenuItem(onClick = {
+                                dropDownTopBarMenuExpanded=false
+                                noteViewModel.exportNotesToCSVFile(context)
+                            }) {
+                                Text(text = "Export Notes To CSV File")
+                            }
                         }
                     }
                 )
@@ -195,6 +218,17 @@ fun NotesNavHost(
         composable("AboutScreen"){
             AboutScreen()
         }
+    }
+}
+
+@Composable
+fun TopAppBarButton(
+    imageVector: ImageVector,
+    description:String,
+    onClick:()-> Unit
+){
+    IconButton(onClick = {onClick()}) {
+        Icon(imageVector = imageVector, contentDescription = description)
     }
 }
 

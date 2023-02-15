@@ -2,21 +2,29 @@ package com.example.testnotesapp.viewmodels
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.os.Handler
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.os.Build
 import android.util.Log
-import androidx.compose.runtime.collectAsState
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.core.content.FileProvider
 import androidx.lifecycle.*
-import com.example.testnotesapp.data.db.NoteDatabase
 import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.data.repository.NoteRepository
 import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.state.NoteUiState
+import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import java.io.File
+import java.time.Instant
+import java.time.format.DateTimeFormatter
 
 class NoteViewModel(app: Application):AndroidViewModel(app) {
     private val repository = NoteRepository(app.applicationContext)
@@ -136,6 +144,49 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteAllNotes()
         }
+    }
+
+    // do wywalenie do innego pliku
+
+    private fun generateFile(context:Context,fileName: String): File?{
+        val csvFile = File(context.filesDir,fileName)
+        csvFile.createNewFile()
+
+        return if(csvFile.exists()){
+            csvFile
+        }else{
+            null
+        }
+    }
+
+
+    fun exportNotesToCSVFile(context:Context,fileName:String = DateTimeFormatter.ISO_INSTANT.format(Instant.now()).toString()+".csv"){
+        val csvFile = generateFile(context,fileName)
+        if(csvFile!=null){
+            csvWriter().open(csvFile, append=false){
+                // Nagłówki
+                writeRow(listOf("[id]","title","description","color"))
+                listOfNotes.forEachIndexed{index, note ->
+                    writeRow(listOf(note.id,note.title,note.description,note.color.toArgb()))
+                }
+            }
+            Toast.makeText(context,"Succesfully exported!",Toast.LENGTH_SHORT).show()
+
+            val intent = goToFile(context,csvFile)
+            context.startActivity(intent)
+        }else{
+            Toast.makeText(context,"Not exported!",Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    fun goToFile(context: Context,file:File): Intent{
+        val intent = Intent(Intent.ACTION_VIEW)
+        val contentUri = FileProvider.getUriForFile(context,"${context.packageName}.fileprovider",file)
+        val mimeType = context.contentResolver.getType(contentUri)
+        intent.setDataAndType(contentUri,mimeType)
+        intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION or Intent.FLAG_GRANT_WRITE_URI_PERMISSION
+
+        return intent
     }
 
 

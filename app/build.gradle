@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.testnotesapp"
-        minSdk 23
+        minSdk 26
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -85,4 +85,7 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.1"
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.1"
     implementation "androidx.navigation:navigation-fragment-ktx:2.4.2"
+
+    // CVS parser
+    implementation 'com.github.doyaaaaaken:kotlin-csv-jvm:1.8.0'
 }
