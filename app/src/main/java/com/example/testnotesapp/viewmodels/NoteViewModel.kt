@@ -55,7 +55,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     init {
         // wczytanie listy notatek
 
-            listInitialization()
+            //listInitialization()
 
     }
 
@@ -136,14 +136,14 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
         }
     }
     fun deleteNote(note: NoteEntity){
-        Log.d("TEST1234",listOfNotes.toString())
+        //Log.d("TEST1234",listOfNotes.toString())
         _uiState.value = NoteUiState(loading = true)
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteNote(note)
-            Log.d("TEST1234",listOfNotes.toString())
+            //Log.d("TEST1234",listOfNotes.toString())
 
-            listInitialization()
-            Log.d("TEST1234",listOfNotes.toString())
+            //listInitialization()
+            //Log.d("TEST1234",listOfNotes.toString())
 
         }
     }
@@ -196,10 +196,20 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
         return intent
     }
 
+    fun loadList(refresher:List<NoteEntity>){
+        listOfNotes.clear()
+        _uiState.value = NoteUiState(loading = true)
+
+        refresher.forEach {item->
+            listOfNotes.add(Note(item.title, item.description, Color(item.color),item.id))
+        }
+
+        _uiState.value = NoteUiState(loading = false, notesList = listOfNotes)
+    }
+
     // do wczytywania plików
 
 
-    @RequiresApi(Build.VERSION_CODES.Q)
     fun loadDataFromCsvFile(uri: Uri, context: Context){
         val file = File(MediaUtils.getFilePath(context,uri).toString())
 
@@ -213,7 +223,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
                     Log.d("FILESIMPORT", row.toString())
                 }
             }
-            listInitialization()
+            //listInitialization()
         }
     }
 

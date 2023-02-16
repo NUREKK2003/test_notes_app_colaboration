@@ -43,11 +43,21 @@ fun MainScreen(
     onClickEditNote: () -> Unit = {},
     notesViewModel: NoteViewModel = viewModel()
 ){
+    val refresher by notesViewModel.getAllNotes().collectAsState(initial = emptyList())
+
+    //notesViewModel.listOfNotes.clear()
+
+//    refresher.forEach {item->
+//        notesViewModel.listOfNotes.add(Note(item.title, item.description, Color(item.color),item.id))
+//    }
+    notesViewModel.loadList(refresher)
+
+
     val notesUiState by notesViewModel.uiState.collectAsState()
     if(notesUiState.loading){
         Text(text = "Loading...")
     }else{
-        NotesColumn(notesList = notesUiState.notesList,onClickEditNote,notesViewModel)
+        NotesColumn(notesList = notesViewModel.listOfNotes,onClickEditNote,notesViewModel)
     }
 
 }

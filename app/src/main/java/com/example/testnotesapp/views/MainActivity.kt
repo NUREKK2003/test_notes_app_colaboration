@@ -99,9 +99,7 @@ fun NotesApp(){
                 val uri: Uri? = activityResult.data?.data
                 Toast.makeText(context,uri.toString(),Toast.LENGTH_SHORT).show()
                 if (uri != null) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                         noteViewModel.loadDataFromCsvFile(uri,context)
-                    }
                 }
             }
         }
