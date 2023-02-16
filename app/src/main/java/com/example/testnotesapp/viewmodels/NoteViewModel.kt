@@ -192,17 +192,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
     // do wczytywania plików
 
-    var requestcode:Int =1
 
-//    fun onActivityResult(requestcode:Int,resultCode:Int,data:Intent,context: Context){
-//        if(requestcode==requestcode && resultCode == Activity.RESULT_OK){
-//            if(data==null){
-//                return
-//            }
-//            val uri:Uri = data.getData()
-//            Toast.makeText(context,uri.getPath(),Toast.LENGTH_SHORT).show()
-//        }
-//    }
     fun loadDataFromCsvFile(uri: Uri){
 
     }
