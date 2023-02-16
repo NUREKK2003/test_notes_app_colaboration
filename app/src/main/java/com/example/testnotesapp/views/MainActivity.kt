@@ -1,10 +1,15 @@
 package com.example.testnotesapp.views
 
+import android.app.Activity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -50,6 +55,8 @@ class MainActivity : ComponentActivity() {
             NotesApp()
         }
     }
+
+
 }
 
 
@@ -59,13 +66,27 @@ fun NotesApp(){
     // Przełącznik do ciemnego motywu
     val darkThemeSwitchState = remember{ mutableStateOf(false) }
     TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
+        val context = LocalContext.current
 
+        // do otwarcia pliku
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.type="*text/csv"
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ){activityResult ->
+            if(activityResult.resultCode == Activity.RESULT_OK){
+                val uri: Uri? = activityResult.data?.data
+                Toast.makeText(context,uri.toString(),Toast.LENGTH_SHORT).show()
+            }
+        }
+        
+        
         // viewModel
         val noteViewModel: NoteViewModel = viewModel()
 
 
         val navController = rememberNavController()
-        val context = LocalContext.current
         val scaffoldState = rememberScaffoldState(rememberDrawerState(initialValue = DrawerValue.Closed))
         val coroutineScope = rememberCoroutineScope()
 
@@ -105,6 +126,13 @@ fun NotesApp(){
                                 noteViewModel.exportNotesToCSVFile(context)
                             }) {
                                 Text(text = "Export Notes To CSV File")
+                            }
+                            DropdownMenuItem(onClick = {
+                                dropDownTopBarMenuExpanded=false
+                                //noteViewModel.openFileChooser(context)
+                                launcher.launch(intent)
+                            }) {
+                                Text(text = "Import notes from CSV File")
                             }
                         }
                     }

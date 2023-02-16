@@ -1,6 +1,7 @@
 package com.example.testnotesapp.viewmodels
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
@@ -188,6 +189,26 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
         return intent
     }
+
+    // do wczytywania plików
+
+    var requestcode:Int =1
+
+//    fun onActivityResult(requestcode:Int,resultCode:Int,data:Intent,context: Context){
+//        if(requestcode==requestcode && resultCode == Activity.RESULT_OK){
+//            if(data==null){
+//                return
+//            }
+//            val uri:Uri = data.getData()
+//            Toast.makeText(context,uri.getPath(),Toast.LENGTH_SHORT).show()
+//        }
+//    }
+    fun openFileChooser(context: Context){
+        val  intent:Intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.setType("*/*")
+        context.startActivity(intent)
+    }
+
 
 
 
