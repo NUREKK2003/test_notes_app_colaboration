@@ -44,6 +44,7 @@ import com.example.testnotesapp.ui.theme.TestNotesAppTheme
 import kotlinx.coroutines.launch
 import com.example.testnotesapp.R
 import com.example.testnotesapp.data.db.structures.NoteEntity
+import com.example.testnotesapp.data.db.structures.Settings
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.viewmodels.NoteViewModel
 import java.io.File
@@ -63,16 +64,23 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun NotesApp(){
+    // viewModel
+    val noteViewModel: NoteViewModel = viewModel()
 
     // Przełącznik do ciemnego motywu
+    val savedSettings by noteViewModel.getSettings().collectAsState(initial = emptyList())
+
     val darkThemeSwitchState = remember{ mutableStateOf(false) }
+
+    if(!savedSettings.isEmpty()){
+        darkThemeSwitchState.value=savedSettings[0].darkTheme
+    }
+
     TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
         val context = LocalContext.current
 
         
-        
-        // viewModel
-        val noteViewModel: NoteViewModel = viewModel()
+
 
 
         val navController = rememberNavController()
@@ -208,7 +216,10 @@ fun NotesApp(){
                             modifier = Modifier
                                 .padding(start = 10.dp, end = 10.dp)
                         )
-                        Switch(checked = darkThemeSwitchState.value, onCheckedChange = {darkThemeSwitchState.value=it})
+                        Switch(checked = darkThemeSwitchState.value, onCheckedChange = {
+                            darkThemeSwitchState.value=it
+                            noteViewModel.updateSettings(Settings(id=Constants.DEFAULT_SETTINGS_ID, darkTheme = it))
+                        })
                     }
                     Row(
                         verticalAlignment = Alignment.CenterVertically,

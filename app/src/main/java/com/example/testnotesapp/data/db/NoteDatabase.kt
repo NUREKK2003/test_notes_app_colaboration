@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.testnotesapp.data.db.dao.NoteDao
+import com.example.testnotesapp.data.db.dao.SettingsDao
 import com.example.testnotesapp.data.db.structures.NoteEntity
+import com.example.testnotesapp.data.db.structures.Settings
 
 
-@Database(entities = [NoteEntity::class], version = 3, exportSchema = false)
+@Database(entities = [NoteEntity::class,Settings::class], version = 4, exportSchema = false)
 abstract class NoteDatabase:RoomDatabase() {
     abstract fun NoteDao():NoteDao
+    abstract fun SettingsDao():SettingsDao
 
 
 }

@@ -18,7 +18,9 @@ import androidx.core.content.FileProvider
 import androidx.core.net.toFile
 import androidx.lifecycle.*
 import com.example.testnotesapp.data.db.structures.NoteEntity
+import com.example.testnotesapp.data.db.structures.Settings
 import com.example.testnotesapp.data.repository.NoteRepository
+import com.example.testnotesapp.data.repository.SettingsRepository
 import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.state.NoteUiState
@@ -35,6 +37,8 @@ import java.time.format.DateTimeFormatter
 
 class NoteViewModel(app: Application):AndroidViewModel(app) {
     private val repository = NoteRepository(app.applicationContext)
+
+    private val settingsRepository = SettingsRepository(app.applicationContext)
 
     private val _uiState = MutableStateFlow(NoteUiState(loading = true))
 
@@ -85,6 +89,15 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
         }
     }
+    fun getSettings():Flow<List<Settings>>{
+        return settingsRepository.getAllSettings()
+    }
+    fun updateSettings(settings:Settings){
+        viewModelScope.launch(Dispatchers.IO) {
+            settingsRepository.addSettings(settings)
+        }
+    }
+
     fun getAllNotes():Flow<List<NoteEntity>>{
 
         return repository.getAllNotes()
