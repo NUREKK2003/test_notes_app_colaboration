@@ -70,7 +70,7 @@ fun NotesApp(){
 
         // do otwarcia pliku
         val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("*/*")
+        intent.setType("text/comma-separated-values")
         intent.addCategory(Intent.CATEGORY_OPENABLE)
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult()
