@@ -5,25 +5,31 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
+import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.ParcelFileDescriptor
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.lifecycle.*
 import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.data.repository.NoteRepository
 import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.state.NoteUiState
+import com.example.testnotesapp.utils.MediaUtils
+import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
+import java.nio.file.Files
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
@@ -193,8 +199,19 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     // do wczytywania plików
 
 
-    fun loadDataFromCsvFile(uri: Uri){
-
+    @RequiresApi(Build.VERSION_CODES.Q)
+    fun loadDataFromCsvFile(uri: Uri, context: Context){
+        val file = File(MediaUtils.getFilePath(context,uri).toString())
+        //val file = context.contentResolver.openFile(uri,"r",null)
+        //val file
+        //val file2 = context.contentResolver.openInputStream(uri)
+        //val inputStream = context.contentResolver.openInputStream(uri)
+        val rows= csvReader().readAll(file)
+//        csvReader().open(file){
+//
+//        }
+        //Log.d("FILESIMPORT", Files.size(file.toPath()).toString())
+        //Log.d("FILESIMPORT", )
     }
 
 }

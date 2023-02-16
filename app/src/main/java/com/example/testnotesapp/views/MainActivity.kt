@@ -3,6 +3,7 @@ package com.example.testnotesapp.views
 import android.app.Activity
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -10,6 +11,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -44,8 +46,7 @@ import com.example.testnotesapp.R
 import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.viewmodels.NoteViewModel
-
-
+import java.io.File
 
 
 class MainActivity : ComponentActivity() {
@@ -68,18 +69,6 @@ fun NotesApp(){
     TestNotesAppTheme(darkTheme = darkThemeSwitchState.value) {
         val context = LocalContext.current
 
-        // do otwarcia pliku
-        val intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("text/comma-separated-values")
-        intent.addCategory(Intent.CATEGORY_OPENABLE)
-        val launcher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult()
-        ){activityResult ->
-            if(activityResult.resultCode == Activity.RESULT_OK){
-                val uri: Uri? = activityResult.data?.data
-                Toast.makeText(context,uri.toString(),Toast.LENGTH_SHORT).show()
-            }
-        }
         
         
         // viewModel
@@ -96,6 +85,25 @@ fun NotesApp(){
         // czy lista na topAppBarze jest rozsunięta
         var dropDownTopBarMenuExpanded by remember {
             mutableStateOf(false)
+        }
+
+
+        // do otwarcia pliku
+        val intent = Intent(Intent.ACTION_GET_CONTENT)
+        intent.setType("text/comma-separated-values")
+        intent.addCategory(Intent.CATEGORY_OPENABLE)
+        val launcher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult()
+        ){activityResult ->
+            if(activityResult.resultCode == Activity.RESULT_OK){
+                val uri: Uri? = activityResult.data?.data
+                Toast.makeText(context,uri.toString(),Toast.LENGTH_SHORT).show()
+                if (uri != null) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        noteViewModel.loadDataFromCsvFile(uri,context)
+                    }
+                }
+            }
         }
         Scaffold(
             scaffoldState = scaffoldState,
