@@ -202,8 +202,19 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     @RequiresApi(Build.VERSION_CODES.Q)
     fun loadDataFromCsvFile(uri: Uri, context: Context){
         val file = File(MediaUtils.getFilePath(context,uri).toString())
-        val rows= csvReader().readAll(file)
-        Log.d("FILESIMPORT", rows.toString())
+
+        _uiState.value = NoteUiState(loading = true)
+        viewModelScope.launch {
+            csvReader().open(file){
+                readAllAsSequence().forEachIndexed { index,row: List<String> ->
+                    if(index!=0){
+                        addNote(NoteEntity(id=row[0].toInt(), title = row[1], description = row[2], color = row[3].toInt()))
+                    }
+                    Log.d("FILESIMPORT", row.toString())
+                }
+            }
+            listInitialization()
+        }
     }
 
 }
