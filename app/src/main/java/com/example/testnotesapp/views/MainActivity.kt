@@ -140,6 +140,13 @@ fun NotesApp(){
                             }) {
                                 Text(text = "Import notes from CSV File")
                             }
+                            DropdownMenuItem(onClick = {
+                                dropDownTopBarMenuExpanded=false
+                                //noteViewModel.openFileChooser(context)
+                                noteViewModel.deleteAllNotes()
+                            }) {
+                                Text(text = "Remove all notes")
+                            }
                         }
                     }
                 )

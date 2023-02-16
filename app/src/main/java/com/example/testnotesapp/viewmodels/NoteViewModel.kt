@@ -218,7 +218,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
             csvReader().open(file){
                 readAllAsSequence().forEachIndexed { index,row: List<String> ->
                     if(index!=0){
-                        addNote(NoteEntity(id=row[0].toInt(), title = row[1], description = row[2], color = row[3].toInt()))
+                        addNote(NoteEntity(title = row[1], description = row[2], color = row[3].toInt()))
                     }
                     Log.d("FILESIMPORT", row.toString())
                 }
