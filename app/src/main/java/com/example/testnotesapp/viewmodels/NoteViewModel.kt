@@ -203,13 +203,8 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 //            Toast.makeText(context,uri.getPath(),Toast.LENGTH_SHORT).show()
 //        }
 //    }
-    fun openFileChooser(context: Context){
-        val  intent:Intent = Intent(Intent.ACTION_GET_CONTENT)
-        intent.setType("*/*")
-        context.startActivity(intent)
+    fun loadDataFromCsvFile(uri: Uri){
+
     }
-
-
-
 
 }
