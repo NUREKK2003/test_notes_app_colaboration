@@ -202,16 +202,8 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     @RequiresApi(Build.VERSION_CODES.Q)
     fun loadDataFromCsvFile(uri: Uri, context: Context){
         val file = File(MediaUtils.getFilePath(context,uri).toString())
-        //val file = context.contentResolver.openFile(uri,"r",null)
-        //val file
-        //val file2 = context.contentResolver.openInputStream(uri)
-        //val inputStream = context.contentResolver.openInputStream(uri)
         val rows= csvReader().readAll(file)
-//        csvReader().open(file){
-//
-//        }
-        //Log.d("FILESIMPORT", Files.size(file.toPath()).toString())
-        //Log.d("FILESIMPORT", )
+        Log.d("FILESIMPORT", rows.toString())
     }
 
 }
