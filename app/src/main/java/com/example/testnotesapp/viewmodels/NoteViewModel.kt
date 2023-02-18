@@ -71,6 +71,16 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
 
 
+    private val _noteToDelete = MutableStateFlow(Constants.DEFAULT_NOTE_ENTITY)
+    val noteToDelete: StateFlow<NoteEntity> = _noteToDelete.asStateFlow()
+
+
+    fun setNoteToDelete(note:NoteEntity){
+        _noteToDelete.value = note
+    }
+
+
+
 
 
     init {

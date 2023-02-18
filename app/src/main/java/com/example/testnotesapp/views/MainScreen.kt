@@ -120,99 +120,105 @@ fun NoteCardItem(
 
     val showRemoveOneDialog by notesViewModel.showRemoveOneDialog.collectAsState(initial = false)
 
-
-    ConfirmAlertDialog(
-        show = showRemoveOneDialog,
-        title = "Confirm",
-        message = "Do you want to remove this note?",
-        confirmText = "YES",
-        denyText = "NO",
-        onConfirm = {
-            notesViewModel.deleteNote(NoteEntity("","",noteItem.id))
-            notesViewModel.hideDialogRemoveOne()
-        },
-        onDimiss = {
-            notesViewModel.hideDialogRemoveOne()
-        }
-    )
+    val noteToDelete by notesViewModel.noteToDelete.collectAsState(initial = Constants.DEFAULT_NOTE_ENTITY)
 
 
 
-        Card(
-            elevation = 10.dp,
-            shape = RoundedCornerShape(4.dp),
-            backgroundColor = Color(noteItem.color),
-            modifier = modifier
-                .padding(4.dp)
-                .height(150.dp)
-                .clickable {
-                    onClickEditNote.invoke()
-                    notesViewModel.chooseNoteById(noteItem.id)
-                }
+
+
+
+    Card(
+        elevation = 10.dp,
+        shape = RoundedCornerShape(4.dp),
+        backgroundColor = Color(noteItem.color),
+        modifier = modifier
+            .padding(4.dp)
+            .height(150.dp)
+            .clickable {
+                onClickEditNote.invoke()
+                notesViewModel.chooseNoteById(noteItem.id)
+            }
+    ) {
+        Column(
+            modifier = Modifier
+                .padding(5.dp)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(5.dp)
+            Row(
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = noteItem.title,
-                        maxLines = 1,
-                        fontWeight = FontWeight.Bold,
-                        overflow = TextOverflow.Ellipsis,
-                        fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                        color = Color.Black
-                    )
-                    // do wyrównania ostatniego elementu wiersza do prawej
-                    Spacer(Modifier.weight(1f))
-                    IconButton(onClick = {expanded = true }) {
-                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options", tint = Color.Black)
+                Text(
+                    text = noteItem.title,
+                    maxLines = 1,
+                    fontWeight = FontWeight.Bold,
+                    overflow = TextOverflow.Ellipsis,
+                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                    color = Color.Black
+                )
+                // do wyrównania ostatniego elementu wiersza do prawej
+                Spacer(Modifier.weight(1f))
+                IconButton(onClick = {expanded = true }) {
+                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options", tint = Color.Black)
 
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false },
-                            modifier = Modifier
-                                .width(100.dp)
-                                .background(
-                                    Color.White
-                                )
-                        ) {
-                            items.forEachIndexed { index, s ->
-                                DropdownMenuItem(onClick = {
-                                    selectedIndex = index
-                                    expanded = false
+                    DropdownMenu(
+                        expanded = expanded,
+                        onDismissRequest = { expanded = false },
+                        modifier = Modifier
+                            .width(100.dp)
+                            .background(
+                                Color.White
+                            )
+                    ) {
+                        items.forEachIndexed { index, s ->
+                            DropdownMenuItem(onClick = {
+                                selectedIndex = index
+                                expanded = false
 
-                                    if(s=="Edit"){
-                                        onClickEditNote.invoke()
-                                        notesViewModel.chooseNoteById(noteItem.id)
-                                    }else if(s=="Delete"){
-                                        notesViewModel.openDialogRemoveOne()
-
-                                    }
-                                }) {
-                                    Text(
-                                        text = s,
-                                        color = Color.Black
-                                    )
+                                if(s=="Edit"){
+                                    onClickEditNote.invoke()
+                                    notesViewModel.chooseNoteById(noteItem.id)
+                                }else if(s=="Delete"){
+                                    notesViewModel.setNoteToDelete(noteItem)
+                                    notesViewModel.openDialogRemoveOne()
                                 }
+
+                            }) {
+                                Text(
+                                    text = s,
+                                    color = Color.Black
+                                )
                             }
                         }
                     }
-                }
-                Text(
-                    text = noteItem.description,
-                    fontSize = MaterialTheme.typography.body1.fontSize,
-                    maxLines = 4,
-                    overflow = TextOverflow.Ellipsis,
-                    color = Color.Black,
-                    modifier = Modifier
-                        .padding(top = 5.dp)
-                )
 
+                    ConfirmAlertDialog(
+                        show = showRemoveOneDialog,
+                        title = "Confirm",
+                        message = "Do you want to remove this note?",
+                        confirmText = "YES",
+                        denyText = "NO",
+                        onConfirm = {
+                            Log.d("COTU",noteItem.id.toString())
+                            notesViewModel.deleteNote(noteToDelete)
+                            notesViewModel.hideDialogRemoveOne()
+                        },
+                        onDimiss = {
+                            notesViewModel.hideDialogRemoveOne()
+                        }
+                    )
+                }
             }
+            Text(
+                text = noteItem.description,
+                fontSize = MaterialTheme.typography.body1.fontSize,
+                maxLines = 4,
+                overflow = TextOverflow.Ellipsis,
+                color = Color.Black,
+                modifier = Modifier
+                    .padding(top = 5.dp)
+            )
+
         }
+    }
 
 
 }
