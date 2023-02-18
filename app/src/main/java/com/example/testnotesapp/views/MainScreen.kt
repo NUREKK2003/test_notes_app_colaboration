@@ -57,7 +57,9 @@ fun MainScreen(
     if(notesUiState.loading){
         Text(text = "Loading...")
     }else{
+        //Text(text = notesViewModel.listOfNotes.toString())
         NotesColumn(notesList = notesViewModel.listOfNotes,onClickEditNote,notesViewModel)
+
     }
 
 }
@@ -69,24 +71,29 @@ fun NotesColumn(
     notesViewModel: NoteViewModel = viewModel()
 ){
 
-    LazyVerticalGrid(
-        cells = GridCells.Fixed(2),
-        contentPadding = PaddingValues(
-            start = 12.dp,
-            top = 16.dp,
-            end = 12.dp,
-            bottom = 16.dp
-        )
-    ){
-        items(notesList){ note->
-            NoteCardItem(
-                note,
-                onClickEditNote,
-                modifier = Modifier.animateItemPlacement(),
-                notesViewModel = notesViewModel
-            )
-        }
 
+    Log.d("NODLACZEGO",notesList.toString())
+    if(notesList.isNotEmpty()){
+
+        LazyVerticalGrid(
+            cells = GridCells.Fixed(2),
+            contentPadding = PaddingValues(
+                start = 12.dp,
+                top = 16.dp,
+                end = 12.dp,
+                bottom = 16.dp
+            )
+        ){
+            itemsIndexed(notesList){ index,note->
+                NoteCardItem(
+                    note,
+                    onClickEditNote,
+                    modifier = Modifier.animateItemPlacement(),
+                    notesViewModel = notesViewModel
+                )
+            }
+
+        }
     }
 }
 
@@ -173,7 +180,7 @@ fun NoteCardItem(
                                     notesViewModel.chooseNoteById(noteItem.id)
                                 }else if(s=="Delete"){
                                     notesViewModel.openDialogRemoveOne()
-                                    
+
                                 }
                             }) {
                                 Text(

@@ -32,6 +32,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
@@ -212,15 +213,15 @@ fun NotesApp(){
                             .padding(10.dp)
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.ic_launcher_background),
-                            contentDescription = "User Icon",
+                            painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                            contentDescription = "icon",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
                                 .clip(CircleShape)
                                 .size(50.dp)
                         )
                         Text(
-                            text = "Username",
+                            text = "CSV NOTES APP",
                             fontSize = MaterialTheme.typography.h5.fontSize,
                             modifier = Modifier
                                 .padding(start = 10.dp)
@@ -235,12 +236,28 @@ fun NotesApp(){
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
                             .padding(10.dp)
+                            .clickable {
+                                navController.navigate("Main")
+                            }
+                            .fillMaxWidth()
+                    ) {
+                        Text(
+                            text = "Notes list",
+                            fontSize = MaterialTheme.typography.h5.fontSize,
+                            modifier = Modifier
+                                .padding(start = 10.dp, end = 10.dp)
+                        )
+                    }
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier
+                            .padding(10.dp)
                     ) {
                         Icon(
                             painter = painterResource(id = R.drawable.baseline_nightlight_round_24),
                             contentDescription = "User Icon",
                             modifier = Modifier
-                                .size(50.dp)
+                                .size(40.dp)
                         )
                         Text(
                             text = "Night theme",

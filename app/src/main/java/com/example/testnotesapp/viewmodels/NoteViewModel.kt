@@ -1,22 +1,15 @@
 package com.example.testnotesapp.viewmodels
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
 import android.net.Uri
-import android.os.Build
-import android.os.CountDownTimer
-import android.os.ParcelFileDescriptor
 import android.util.Log
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.lifecycle.*
 import com.example.testnotesapp.data.db.structures.NoteEntity
 import com.example.testnotesapp.data.db.structures.Settings
@@ -26,14 +19,12 @@ import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.state.NoteUiState
 import com.example.testnotesapp.utils.MediaUtils
-import com.example.testnotesapp.utils.Timer
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import java.io.File
-import java.nio.file.Files
 import java.time.Instant
 import java.time.format.DateTimeFormatter
 
@@ -55,15 +46,15 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
     // Timer
 
-    val MyTimer = object : CountDownTimer(Constants.SAVE_COOLDOWN_TIME, 1000) {
-        override fun onTick(millisUntilFinished: Long) {
-            // Do something on each tick (interval)
-        }
-
-        override fun onFinish() {
-            disableSaveCooldown()
-        }
-    }
+//    val MyTimer = object : CountDownTimer(Constants.SAVE_COOLDOWN_TIME, 1000) {
+//        override fun onTick(millisUntilFinished: Long) {
+//            // Do something on each tick (interval)
+//        }
+//
+//        override fun onFinish() {
+//            disableSaveCooldown()
+//        }
+//    }
 
 
     // alert Dialogi
@@ -89,14 +80,14 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
     }
 
-    private fun disableSaveCooldown(){
-        _saveCooldown.value=false
-        MyTimer.cancel()
-    }
-    private fun enableSaveCooldown(){
-        _saveCooldown.value=true
-        MyTimer.start()
-    }
+//    private fun disableSaveCooldown(){
+//        _saveCooldown.value=false
+//        MyTimer.cancel()
+//    }
+//    private fun enableSaveCooldown(){
+//        _saveCooldown.value=true
+//        MyTimer.start()
+//    }
 
     @SuppressLint("SuspiciousIndentation")
     fun listInitialization(){
@@ -173,7 +164,6 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     }
 
     fun addNote(note: NoteEntity){
-        enableSaveCooldown()
         viewModelScope.launch(Dispatchers.IO) {
             repository.addNote(note)
         }
@@ -246,8 +236,10 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     }
 
     fun loadList(refresher:List<NoteEntity>){
-        listOfNotes.clear()
         _uiState.value = NoteUiState(loading = true)
+        if(!refresher.isEmpty()){
+            listOfNotes.clear()
+        }
 
         refresher.forEach {item->
             listOfNotes.add(Note(item.title, item.description, Color(item.color),item.id))

@@ -47,7 +47,6 @@ fun AddNoteScreen(
             if(selectedNote.id==Constants.DEFAULT_ID){
                 if(!saveCooldown){
                     notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value, color = selectedNote.color.toArgb()))
-                    onClickSave.invoke()
                 }
             }else{
                 notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value,selectedNote.id, color = selectedNote.color.toArgb()))
@@ -156,6 +155,7 @@ fun SaveButton(
     Button(
         onClick = {
             onClickSave.invoke()
+            onClickGotoMainScreen.invoke()
         },
         modifier = modifier
             .fillMaxWidth()
