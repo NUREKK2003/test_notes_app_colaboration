@@ -72,7 +72,6 @@ fun NotesColumn(
 ){
 
 
-    Log.d("NODLACZEGO",notesList.toString())
     if(notesList.isNotEmpty()){
 
         LazyVerticalGrid(
@@ -84,7 +83,7 @@ fun NotesColumn(
                 bottom = 16.dp
             )
         ){
-            itemsIndexed(notesList){ index,note->
+            items(notesList){note->
                 NoteCardItem(
                     note,
                     onClickEditNote,
@@ -104,6 +103,10 @@ fun NoteCardItem(
     modifier: Modifier=Modifier,
     notesViewModel: NoteViewModel = viewModel()
 ){
+    // widoczność do animacji:
+    var isVisible by remember { mutableStateOf(false) }
+
+
     // do droplisty
     var expanded by remember { mutableStateOf(false) }
     val items = listOf("Edit", "Delete")
@@ -129,81 +132,85 @@ fun NoteCardItem(
         }
     )
 
-    Card(
-        elevation = 10.dp,
-        shape = RoundedCornerShape(4.dp),
-        backgroundColor = noteItem.color,
-        modifier = modifier
-            .padding(4.dp)
-            .height(150.dp)
-            .clickable {
-                onClickEditNote.invoke()
-                notesViewModel.chooseNoteById(noteItem.id)
-            }
-    ) {
-        Column(
-            modifier = Modifier
-                .padding(5.dp)
+
+
+        Card(
+            elevation = 10.dp,
+            shape = RoundedCornerShape(4.dp),
+            backgroundColor = noteItem.color,
+            modifier = modifier
+                .padding(4.dp)
+                .height(150.dp)
+                .clickable {
+                    onClickEditNote.invoke()
+                    notesViewModel.chooseNoteById(noteItem.id)
+                }
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
+            Column(
+                modifier = Modifier
+                    .padding(5.dp)
             ) {
-                Text(
-                    text = noteItem.title,
-                    maxLines = 1,
-                    fontWeight = FontWeight.Bold,
-                    overflow = TextOverflow.Ellipsis,
-                    fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                    color = Color.Black
-                )
-                // do wyrównania ostatniego elementu wiersza do prawej
-                Spacer(Modifier.weight(1f))
-                IconButton(onClick = {expanded = true }) {
-                    Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options", tint = Color.Black)
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = noteItem.title,
+                        maxLines = 1,
+                        fontWeight = FontWeight.Bold,
+                        overflow = TextOverflow.Ellipsis,
+                        fontSize = MaterialTheme.typography.subtitle1.fontSize,
+                        color = Color.Black
+                    )
+                    // do wyrównania ostatniego elementu wiersza do prawej
+                    Spacer(Modifier.weight(1f))
+                    IconButton(onClick = {expanded = true }) {
+                        Icon(imageVector = Icons.Default.Menu, contentDescription = "Notes Options", tint = Color.Black)
 
-                    DropdownMenu(
-                        expanded = expanded,
-                        onDismissRequest = { expanded = false },
-                        modifier = Modifier
-                            .width(100.dp)
-                            .background(
-                                Color.White
-                            )
-                    ) {
-                        items.forEachIndexed { index, s ->
-                            DropdownMenuItem(onClick = {
-                                selectedIndex = index
-                                expanded = false
-
-                                if(s=="Edit"){
-                                    onClickEditNote.invoke()
-                                    notesViewModel.chooseNoteById(noteItem.id)
-                                }else if(s=="Delete"){
-                                    notesViewModel.openDialogRemoveOne()
-
-                                }
-                            }) {
-                                Text(
-                                    text = s,
-                                    color = Color.Black
+                        DropdownMenu(
+                            expanded = expanded,
+                            onDismissRequest = { expanded = false },
+                            modifier = Modifier
+                                .width(100.dp)
+                                .background(
+                                    Color.White
                                 )
+                        ) {
+                            items.forEachIndexed { index, s ->
+                                DropdownMenuItem(onClick = {
+                                    selectedIndex = index
+                                    expanded = false
+
+                                    if(s=="Edit"){
+                                        onClickEditNote.invoke()
+                                        notesViewModel.chooseNoteById(noteItem.id)
+                                    }else if(s=="Delete"){
+                                        notesViewModel.openDialogRemoveOne()
+
+                                    }
+                                }) {
+                                    Text(
+                                        text = s,
+                                        color = Color.Black
+                                    )
+                                }
                             }
                         }
                     }
                 }
-            }
-            Text(
-                text = noteItem.description,
-                fontSize = MaterialTheme.typography.body1.fontSize,
-                maxLines = 4,
-                overflow = TextOverflow.Ellipsis,
-                color = Color.Black,
-                modifier = Modifier
-                    .padding(top = 5.dp)
-            )
+                Text(
+                    text = noteItem.description,
+                    fontSize = MaterialTheme.typography.body1.fontSize,
+                    maxLines = 4,
+                    overflow = TextOverflow.Ellipsis,
+                    color = Color.Black,
+                    modifier = Modifier
+                        .padding(top = 5.dp)
+                )
 
+            }
         }
-    }
+
+
 }
 
 

@@ -221,7 +221,7 @@ fun NotesApp(){
                                 .size(50.dp)
                         )
                         Text(
-                            text = "CSV NOTES APP",
+                            text = "CSV NOTES",
                             fontSize = MaterialTheme.typography.h5.fontSize,
                             modifier = Modifier
                                 .padding(start = 10.dp)
