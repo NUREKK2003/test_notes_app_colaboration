@@ -5,11 +5,11 @@ plugins {
 }
 
 android {
-    namespace 'com.example.testnotesapp'
+    namespace 'com.nomteam.csvnotesapp'
     compileSdk 33
 
     defaultConfig {
-        applicationId "com.example.testnotesapp"
+        applicationId "com.nomteam.csvnotesapp"
         minSdk 26
         targetSdk 33
         versionCode 1
