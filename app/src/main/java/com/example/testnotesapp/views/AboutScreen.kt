@@ -27,7 +27,7 @@ fun AboutScreen(){
 
         Text(
             text = stringResource(R.string.app_description),
-            modifier = Modifier.padding(start = 10.dp)
+            modifier = Modifier.padding(start = 10.dp, end = 10.dp)
         )
         Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
         Autors(Modifier.padding(start = 10.dp))

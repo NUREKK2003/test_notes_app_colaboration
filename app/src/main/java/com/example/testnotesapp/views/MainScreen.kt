@@ -45,7 +45,7 @@ fun MainScreen(
 ){
     val refresher by notesViewModel.getAllNotes().collectAsState(initial = emptyList())
 
-    //notesViewModel.listOfNotes.clear()
+    notesViewModel.listOfNotes.clear()
 
 //    refresher.forEach {item->
 //        notesViewModel.listOfNotes.add(Note(item.title, item.description, Color(item.color),item.id))
@@ -58,7 +58,9 @@ fun MainScreen(
         Text(text = "Loading...")
     }else{
         //Text(text = notesViewModel.listOfNotes.toString())
-        NotesColumn(notesList = notesViewModel.listOfNotes,onClickEditNote,notesViewModel)
+        if(!refresher.isEmpty()){
+            NotesColumn(notesList = refresher,onClickEditNote,notesViewModel)
+        }
 
     }
 
@@ -66,7 +68,7 @@ fun MainScreen(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NotesColumn(
-    notesList:List<Note>,
+    notesList:List<NoteEntity>,
     onClickEditNote: () -> Unit = {},
     notesViewModel: NoteViewModel = viewModel()
 ){
@@ -93,12 +95,14 @@ fun NotesColumn(
             }
 
         }
+    }else{
+        Spacer(modifier = Modifier.padding(0.dp))
     }
 }
 
 @Composable
 fun NoteCardItem(
-    noteItem:Note,
+    noteItem:NoteEntity,
     onClickEditNote: () -> Unit = {},
     modifier: Modifier=Modifier,
     notesViewModel: NoteViewModel = viewModel()
@@ -137,7 +141,7 @@ fun NoteCardItem(
         Card(
             elevation = 10.dp,
             shape = RoundedCornerShape(4.dp),
-            backgroundColor = noteItem.color,
+            backgroundColor = Color(noteItem.color),
             modifier = modifier
                 .padding(4.dp)
                 .height(150.dp)

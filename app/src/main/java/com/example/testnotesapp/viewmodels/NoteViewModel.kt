@@ -188,6 +188,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     }
     fun deleteAllNotes(){
         viewModelScope.launch(Dispatchers.IO) {
+            listOfNotes.clear()
             repository.deleteAllNotes()
         }
     }
@@ -237,7 +238,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
     fun loadList(refresher:List<NoteEntity>){
         _uiState.value = NoteUiState(loading = true)
-        if(!refresher.isEmpty()){
+        if(refresher.isNotEmpty()){
             listOfNotes.clear()
         }
 
