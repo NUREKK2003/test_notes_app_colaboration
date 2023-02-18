@@ -11,4 +11,6 @@ object Constants {
     val DEFAULT_NOTE_COLOR = Color.Yellow
 
     val DEFAULT_SETTINGS_ID=1
+
+    val SAVE_COOLDOWN_TIME=2000L
 }

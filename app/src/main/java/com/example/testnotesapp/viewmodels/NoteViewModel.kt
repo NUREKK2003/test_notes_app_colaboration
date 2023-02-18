@@ -8,6 +8,7 @@ import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Build
+import android.os.CountDownTimer
 import android.os.ParcelFileDescriptor
 import android.util.Log
 import android.widget.Toast
@@ -25,6 +26,7 @@ import com.example.testnotesapp.data.structures.Note
 import com.example.testnotesapp.objects.Constants
 import com.example.testnotesapp.state.NoteUiState
 import com.example.testnotesapp.utils.MediaUtils
+import com.example.testnotesapp.utils.Timer
 import com.github.doyaaaaaken.kotlincsv.dsl.csvReader
 import com.github.doyaaaaaken.kotlincsv.dsl.csvWriter
 import kotlinx.coroutines.Dispatchers
@@ -51,6 +53,18 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
     val notesHandler = getAllNotes()
 
+    // Timer
+
+    val MyTimer = object : CountDownTimer(Constants.SAVE_COOLDOWN_TIME, 1000) {
+        override fun onTick(millisUntilFinished: Long) {
+            // Do something on each tick (interval)
+        }
+
+        override fun onFinish() {
+            disableSaveCooldown()
+        }
+    }
+
 
     // alert Dialogi
 
@@ -61,6 +75,8 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     private val _showDialogRemoveOne = MutableStateFlow(false)
     val showRemoveOneDialog: StateFlow<Boolean> = _showDialogRemoveOne.asStateFlow()
 
+    private val _saveCooldown = MutableStateFlow(false)
+    val saveCooldown: StateFlow<Boolean> = _saveCooldown.asStateFlow()
 
 
 
@@ -71,6 +87,15 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
 
             //listInitialization()
 
+    }
+
+    private fun disableSaveCooldown(){
+        _saveCooldown.value=false
+        MyTimer.cancel()
+    }
+    private fun enableSaveCooldown(){
+        _saveCooldown.value=true
+        MyTimer.start()
     }
 
     @SuppressLint("SuspiciousIndentation")
@@ -148,6 +173,7 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     }
 
     fun addNote(note: NoteEntity){
+        enableSaveCooldown()
         viewModelScope.launch(Dispatchers.IO) {
             repository.addNote(note)
         }

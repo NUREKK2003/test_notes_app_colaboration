@@ -19,6 +19,8 @@ class Timer {
             }
         } else {
             onEnd()
+
+            Log.d("TESTqwd","koniec")
         }
     }
 

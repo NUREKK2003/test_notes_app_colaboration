@@ -34,6 +34,8 @@ fun AddNoteScreen(
 
     var textDesc = remember { mutableStateOf(selectedNote.description) }
 
+    val saveCooldown by notesViewModel.saveCooldown.collectAsState(initial = false)
+
 
     Column {
         InputTitle(textTit)
@@ -43,9 +45,14 @@ fun AddNoteScreen(
         DropDownMenu(notesViewModel)
         SaveButton(onClickSave,{
             if(selectedNote.id==Constants.DEFAULT_ID){
-                notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value, color = selectedNote.color.toArgb()))
+                if(!saveCooldown){
+                    notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value, color = selectedNote.color.toArgb()))
+                    onClickSave.invoke()
+                }
             }else{
                 notesViewModel.addNote(NoteEntity(textTit.value,textDesc.value,selectedNote.id, color = selectedNote.color.toArgb()))
+
+                onClickSave.invoke()
             }
             })
     }
@@ -149,7 +156,6 @@ fun SaveButton(
     Button(
         onClick = {
             onClickSave.invoke()
-            onClickGotoMainScreen.invoke()
         },
         modifier = modifier
             .fillMaxWidth()
