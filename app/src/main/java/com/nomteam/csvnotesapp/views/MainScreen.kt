@@ -139,7 +139,8 @@ fun NoteCardItem(
                     fontWeight = FontWeight.Bold,
                     overflow = TextOverflow.Ellipsis,
                     fontSize = MaterialTheme.typography.subtitle1.fontSize,
-                    color = Color.Black
+                    color = Color.Black,
+                    modifier=Modifier.fillMaxWidth(.8f)
                 )
                 // do wyrównania ostatniego elementu wiersza do prawej
                 Spacer(Modifier.weight(1f))
