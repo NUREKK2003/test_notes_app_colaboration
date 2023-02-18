@@ -102,6 +102,26 @@ fun NoteCardItem(
     val items = listOf("Edit", "Delete")
     var selectedIndex by remember { mutableStateOf(0) }
 
+
+
+    val showRemoveOneDialog by notesViewModel.showRemoveOneDialog.collectAsState(initial = false)
+
+
+    ConfirmAlertDialog(
+        show = showRemoveOneDialog,
+        title = "Confirm",
+        message = "Do you want to remove this note?",
+        confirmText = "YES",
+        denyText = "NO",
+        onConfirm = {
+            notesViewModel.deleteNote(NoteEntity("","",noteItem.id))
+            notesViewModel.hideDialogRemoveOne()
+        },
+        onDimiss = {
+            notesViewModel.hideDialogRemoveOne()
+        }
+    )
+
     Card(
         elevation = 10.dp,
         shape = RoundedCornerShape(4.dp),
@@ -152,7 +172,7 @@ fun NoteCardItem(
                                     onClickEditNote.invoke()
                                     notesViewModel.chooseNoteById(noteItem.id)
                                 }else if(s=="Delete"){
-                                    notesViewModel.deleteNote(NoteEntity("","",noteItem.id))
+                                    notesViewModel.openDialogRemoveOne()
                                     
                                 }
                             }) {

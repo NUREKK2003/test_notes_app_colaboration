@@ -58,6 +58,9 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     private val _showDialogRemoveAll = MutableStateFlow(false)
     val showRemoveAllDialog: StateFlow<Boolean> = _showDialogRemoveAll.asStateFlow()
 
+    private val _showDialogRemoveOne = MutableStateFlow(false)
+    val showRemoveOneDialog: StateFlow<Boolean> = _showDialogRemoveOne.asStateFlow()
+
 
 
 
@@ -253,6 +256,12 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     }
     fun hideDialogRemoveAll(){
         _showDialogRemoveAll.value = false
+    }
+    fun openDialogRemoveOne(){
+        _showDialogRemoveOne.value = true
+    }
+    fun hideDialogRemoveOne(){
+        _showDialogRemoveOne.value = false
     }
 
 }

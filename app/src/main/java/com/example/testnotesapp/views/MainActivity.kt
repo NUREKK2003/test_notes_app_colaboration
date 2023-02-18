@@ -152,8 +152,11 @@ fun NotesApp(){
                                     dropDownTopBarMenuExpanded=false
                                     noteViewModel.exportNotesToCSVFile(context)
                                 }) {
-                                    Row(){
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ){
                                         Icon(painter = painterResource(id = R.drawable.upload_icon),"")
+                                        Spacer(modifier = Modifier.width(5.dp))
                                         Text(text = "Export Notes To CSV File")
                                     }
                                 }
@@ -162,8 +165,11 @@ fun NotesApp(){
                                     //noteViewModel.openFileChooser(context)
                                     launcher.launch(intent)
                                 }) {
-                                    Row(){
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ){
                                         Icon(painter = painterResource(id = R.drawable.download_icon),"")
+                                        Spacer(modifier = Modifier.width(5.dp))
                                         Text(text = "Import notes from CSV File")
                                     }
                                 }
@@ -172,8 +178,11 @@ fun NotesApp(){
                                     //noteViewModel.openFileChooser(context)
                                     noteViewModel.openDialogRemoveAll()
                                 }) {
-                                    Row(){
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ){
                                         Icon(painter = painterResource(id = R.drawable.delte_icon),"")
+                                        Spacer(modifier = Modifier.width(5.dp))
                                         Text(text = "Remove all notes")
                                     }
                                 }
