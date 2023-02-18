@@ -119,7 +119,7 @@ fun NotesApp(){
             scaffoldState = scaffoldState,
             topBar = {
                 TopAppBar(
-                    title = {Text("Notes App")},
+                    title = {Text("CSV NOTES")},
                     navigationIcon = {
                         IconButton(onClick = {
                             coroutineScope.launch {
@@ -150,7 +150,7 @@ fun NotesApp(){
                                     ){
                                         Icon(painter = painterResource(id = R.drawable.upload_icon),"")
                                         Spacer(modifier = Modifier.width(5.dp))
-                                        Text(text = "Export Notes To CSV File")
+                                        Text(text = "Export notes to CSV file")
                                     }
                                 }
                                 DropdownMenuItem(onClick = {
@@ -163,7 +163,7 @@ fun NotesApp(){
                                     ){
                                         Icon(painter = painterResource(id = R.drawable.download_icon),"")
                                         Spacer(modifier = Modifier.width(5.dp))
-                                        Text(text = "Import notes from CSV File")
+                                        Text(text = "Import notes from CSV file")
                                     }
                                 }
                                 DropdownMenuItem(onClick = {

@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">Test Notes App</string>
+    <string name="app_name">CSV NOTES</string>
     <string name="app_description">CSV NOTES is app that let you easily make notes, export and import them to csv file format. This app is completely ad free.</string>
 </resources>
