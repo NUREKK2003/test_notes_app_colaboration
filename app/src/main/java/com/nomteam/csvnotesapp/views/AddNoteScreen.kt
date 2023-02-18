@@ -71,7 +71,6 @@ fun InputTitle(
         shape = RoundedCornerShape(8.dp),
         modifier = modifier
             .fillMaxWidth()
-            .height(70.dp)
             .padding(10.dp)
     )
 }
