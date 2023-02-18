@@ -19,6 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.outlined.MoreVert
@@ -67,6 +68,11 @@ fun NotesApp(){
     // viewModel
     val noteViewModel: NoteViewModel = viewModel()
 
+
+    // przełączniki do alert dialogów
+
+    val showRemoveAllDialog by noteViewModel.showRemoveAllDialog.collectAsState(initial = false)
+
     // Przełącznik do ciemnego motywu
     val savedSettings by noteViewModel.getSettings().collectAsState(initial = emptyList())
 
@@ -111,6 +117,11 @@ fun NotesApp(){
                 }
             }
         }
+
+
+
+
+
         Scaffold(
             scaffoldState = scaffoldState,
             topBar = {
@@ -126,34 +137,46 @@ fun NotesApp(){
                         }
                     },
                     actions = {
-                        TopAppBarButton(imageVector = Icons.Outlined.MoreVert, description = "options") {
-                            dropDownTopBarMenuExpanded=true
-                        }
-                        DropdownMenu(
-                            expanded = dropDownTopBarMenuExpanded,
-                            onDismissRequest = {
-                                dropDownTopBarMenuExpanded=false
+                        if(navBackStackEntry?.destination?.route.toString()=="Main"){
+
+                            TopAppBarButton(imageVector = Icons.Outlined.MoreVert, description = "options") {
+                                dropDownTopBarMenuExpanded=true
                             }
-                        ) {
-                            DropdownMenuItem(onClick = {
-                                dropDownTopBarMenuExpanded=false
-                                noteViewModel.exportNotesToCSVFile(context)
-                            }) {
-                                Text(text = "Export Notes To CSV File")
-                            }
-                            DropdownMenuItem(onClick = {
-                                dropDownTopBarMenuExpanded=false
-                                //noteViewModel.openFileChooser(context)
-                                launcher.launch(intent)
-                            }) {
-                                Text(text = "Import notes from CSV File")
-                            }
-                            DropdownMenuItem(onClick = {
-                                dropDownTopBarMenuExpanded=false
-                                //noteViewModel.openFileChooser(context)
-                                noteViewModel.deleteAllNotes()
-                            }) {
-                                Text(text = "Remove all notes")
+                            DropdownMenu(
+                                expanded = dropDownTopBarMenuExpanded,
+                                onDismissRequest = {
+                                    dropDownTopBarMenuExpanded=false
+                                }
+                            ) {
+                                DropdownMenuItem(onClick = {
+                                    dropDownTopBarMenuExpanded=false
+                                    noteViewModel.exportNotesToCSVFile(context)
+                                }) {
+                                    Row(){
+                                        Icon(painter = painterResource(id = R.drawable.upload_icon),"")
+                                        Text(text = "Export Notes To CSV File")
+                                    }
+                                }
+                                DropdownMenuItem(onClick = {
+                                    dropDownTopBarMenuExpanded=false
+                                    //noteViewModel.openFileChooser(context)
+                                    launcher.launch(intent)
+                                }) {
+                                    Row(){
+                                        Icon(painter = painterResource(id = R.drawable.download_icon),"")
+                                        Text(text = "Import notes from CSV File")
+                                    }
+                                }
+                                DropdownMenuItem(onClick = {
+                                    dropDownTopBarMenuExpanded=false
+                                    //noteViewModel.openFileChooser(context)
+                                    noteViewModel.openDialogRemoveAll()
+                                }) {
+                                    Row(){
+                                        Icon(painter = painterResource(id = R.drawable.delte_icon),"")
+                                        Text(text = "Remove all notes")
+                                    }
+                                }
                             }
                         }
                     }
@@ -245,6 +268,20 @@ fun NotesApp(){
                 navController = navController,
                 modifier = Modifier.padding(innerPadding)
             )
+            ConfirmAlertDialog(
+                show = showRemoveAllDialog,
+                title = "Confirm",
+                message = "Do you want to remove all saved notes?",
+                confirmText = "YES",
+                denyText = "NO",
+                onConfirm = {
+                    noteViewModel.hideDialogRemoveAll()
+                    noteViewModel.deleteAllNotes()
+                },
+                onDimiss = {
+                    noteViewModel.hideDialogRemoveAll()
+                }
+            )
         }
 
     }
@@ -281,6 +318,40 @@ fun TopAppBarButton(
 ){
     IconButton(onClick = {onClick()}) {
         Icon(imageVector = imageVector, contentDescription = description)
+    }
+}
+
+
+@Composable
+fun ConfirmAlertDialog(
+    show:Boolean=false,
+    title:String,
+    message:String,
+    confirmText:String,
+    denyText:String,
+    onConfirm: () -> Unit,
+    onDimiss: () -> Unit
+){
+    if(show){
+        AlertDialog(
+            onDismissRequest = {onDimiss.invoke()},
+            confirmButton = {
+                TextButton(onClick = { onConfirm.invoke()}) {
+                    Text(text = confirmText)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { onDimiss.invoke() }) {
+                    Text(text = denyText)
+                }
+            },
+            title = {
+                Text(text = title)
+            },
+            text = {
+                Text(text = message)
+            }
+        )
     }
 }
 

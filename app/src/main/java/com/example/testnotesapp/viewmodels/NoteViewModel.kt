@@ -52,6 +52,13 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
     val notesHandler = getAllNotes()
 
 
+    // alert Dialogi
+
+
+    private val _showDialogRemoveAll = MutableStateFlow(false)
+    val showRemoveAllDialog: StateFlow<Boolean> = _showDialogRemoveAll.asStateFlow()
+
+
 
 
 
@@ -238,6 +245,14 @@ class NoteViewModel(app: Application):AndroidViewModel(app) {
             }
             //listInitialization()
         }
+    }
+
+
+    fun openDialogRemoveAll(){
+        _showDialogRemoveAll.value = true
+    }
+    fun hideDialogRemoveAll(){
+        _showDialogRemoveAll.value = false
     }
 
 }
