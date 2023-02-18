@@ -6,12 +6,14 @@ import androidx.compose.material.Divider
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,8 +27,9 @@ fun AboutScreen(){
         Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
 
         Text(
-            text = "",//stringResource(R.string.app_description),
-            modifier = Modifier.padding(start = 10.dp, end = 10.dp)
+            text = stringResource(R.string.app_description),
+            modifier = Modifier
+                .padding(start = 10.dp, end = 10.dp)
         )
         Divider(modifier = Modifier.padding(top = 20.dp, bottom = 20.dp))
         Autors(Modifier.padding(start = 10.dp))
@@ -51,10 +54,10 @@ fun Autors(
 ){
 
     val ppandtosLink = buildAnnotatedString {
-        append("Privacy Policy and Terms of Use: ")
-        pushStringAnnotation(tag = "ppandtos", annotation = "https://google.com")
+        append("Privacy Policy and Terms & Conditions ")
+        pushStringAnnotation(tag = "ppandtos", annotation = "https://csv-notes-app.jimdosite.com/")
         withStyle(style = SpanStyle(color = MaterialTheme.colors.primary)) {
-            append("https://google.com")
+            append("https://csv-notes-app.jimdosite.com/")
         }
         pop()
     }
@@ -96,11 +99,11 @@ fun PPandToS(
     link:AnnotatedString
 ){
     val uriHandler = LocalUriHandler.current
-    ClickableText(text = link, style = MaterialTheme.typography.body1, onClick = { offset ->
+    ClickableText(text = link, style = MaterialTheme.typography.body1.copy(textAlign = TextAlign.Center), onClick = { offset ->
         link.getStringAnnotations(tag = "ppandtos", start = offset, end = offset).firstOrNull()?.let {
             uriHandler.openUri(it.item)
         }
-    })
+    },)
 }
 
 @Composable
