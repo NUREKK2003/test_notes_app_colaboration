@@ -5,8 +5,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.GridCells
-import androidx.compose.foundation.lazy.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -24,6 +24,9 @@ import com.nomteam.csvnotesapp.data.db.structures.NoteEntity
 import com.nomteam.csvnotesapp.objects.Constants
 import com.nomteam.csvnotesapp.ui.theme.TestNotesAppTheme
 import com.nomteam.csvnotesapp.viewmodels.NoteViewModel
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
+import androidx.compose.foundation.layout.safeDrawing
 
 @Composable
 fun MainScreen(
@@ -64,7 +67,7 @@ fun NotesColumn(
     if(notesList.isNotEmpty()){
 
         LazyVerticalGrid(
-            cells = GridCells.Fixed(2),
+            columns = GridCells.Fixed(2),
             contentPadding = PaddingValues(
                 start = 12.dp,
                 top = 16.dp,
@@ -72,9 +75,9 @@ fun NotesColumn(
                 bottom = 16.dp
             )
         ){
-            items(notesList){note->
+            items(notesList.size){index->
                 NoteCardItem(
-                    note,
+                    notesList[index],
                     onClickEditNote,
                     modifier = Modifier.animateItemPlacement(),
                     notesViewModel = notesViewModel

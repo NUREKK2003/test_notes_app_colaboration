@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -119,6 +120,7 @@ fun NotesApp(){
             scaffoldState = scaffoldState,
             topBar = {
                 TopAppBar(
+                    modifier = Modifier.statusBarsPadding(),
                     title = {Text("CSV NOTES")},
                     navigationIcon = {
                         IconButton(onClick = {
@@ -198,7 +200,9 @@ fun NotesApp(){
                 }
             },
             drawerContent = {
-                Column() {
+                Column(
+                    modifier = Modifier.statusBarsPadding()
+                ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
